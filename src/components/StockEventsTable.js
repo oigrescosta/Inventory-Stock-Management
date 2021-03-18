@@ -1,21 +1,31 @@
 import React from 'react'
+import StockDetail from './StockDetail'
 
 const StockEventsTable = (props) => {
-    console.log(props);
-    const {stockEvents} = props
+    const {products, stockEvents} = props
     return (
         <div className="StockEventsTable">
-            {stockEvents.map(event => (
-                <div className="StockEventTable__Card">
-                    <p>Id: {event.id}</p>
-                    <p>Type: {event.type}</p>
-                    <p>Quantity: {event.qty}</p>
-                    <p>Product Name: {event.product.name}</p>
-                </div>
-            ))}
-            
+            {products.map(product => {
+                const {id} = product
+
+                const relevantStockEvents = stockEvents.filter(se => se.product.id === product.id)
+
+                const stockTotal = relevantStockEvents.reduce((acc, currentElement) => {
+                    return acc + currentElement.qty
+                }, 0)
+
+                return (
+                    <div className="StockEventTable__ProductContainer">
+                        <StockDetail 
+                            name={product.name} 
+                            total={stockTotal} 
+                            stockEvents={relevantStockEvents} 
+                        />
+                    </div>
+                )
+            })}
         </div>
     )
-}
+} 
 
 export default StockEventsTable
