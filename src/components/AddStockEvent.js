@@ -17,12 +17,35 @@ class AddStockEvent extends Component {
 
     }
  
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault()
-        const {qty, type} = this.state
+        const {qty, type, product} = this.state
 
         console.log("AddStockEvent.handleSumit qty", qty)
         console.log("AddStockEvent.handleSumit type", type)
+        if(product != 'no') {
+            const data = {
+                qty,
+                type,
+                product: parseInt(product)
+            }
+
+            const add_stock_res = await axios({
+                method: 'POST',
+                url: 'http://localhost:1337/stockevents',
+                data
+            })
+
+            console.log("AddStockEvent.handleSubmit add_stock_res", add_stock_res)
+            if(add_stock_res.status === 200) {
+                alert("Success")
+                window.location = window.location
+            }
+
+        } else {
+            alert("No product chosen")
+            return
+        }
     }
 
     render() {
