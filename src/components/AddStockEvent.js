@@ -5,7 +5,8 @@ class AddStockEvent extends Component {
     state = {
         qty: 0,
         type: 'add',
-        product: 'no'
+        product: 'no',
+        show: false
     }
 
     handleChange = (event) => {
@@ -54,32 +55,32 @@ class AddStockEvent extends Component {
         //Select a type
         //Submit to Strapi
 
-        const {qty, type, product} = this.state
+        const {qty, type, product, show} = this.state
 
         console.log("AddStockEvent.render this.props", this.props)
         const {products} = this.props
 
         return(
             <div className="AddStockEvent">
-                Add Stock Event
-                <form onSubmit={this.handleSubmit}>
-                    <select onChange={this.handleChange} name="product" value={product}>
-                        <option value='no'>Please select a product</option>
-                        {products.map((product, i) => (
-                            <option key={i} value={product.id}>{product.name}</option>
-                        ))}
-                    </select>
-                </form>
+                <h1>Add Stock Event <button onClick={() => this.setState({show: !show})}>+ Add</button></h1>
+                {show &&
+                    <form onSubmit={this.handleSubmit}>
+                        <select onChange={this.handleChange} name="product" value={product}>
+                            <option value='no'>Please select a product</option>
+                            {products.map((product, i) => (
+                                <option key={i} value={product.id}>{product.name}</option>
+                            ))}
+                        </select>
 
-                <form onSubmit={this.handleSubmit}>
-                    <input onChange={this.handleChange} type="number" name="qty" value={qty} />
-                    <select onChange={this.handleChange} name="type" value={type}>
-                        <option value='add'>Add</option>
-                        <option value='remove'>Remove</option>
-                    </select>
+                        <input onChange={this.handleChange} type="number" name="qty" value={qty} />
+                        <select onChange={this.handleChange} name="type" value={type}>
+                            <option value='add'>Add</option>
+                            <option value='remove'>Remove</option>
+                        </select>
 
-                    <button>Submit</button>
-                </form>
+                        <button>Submit</button>
+                    </form>
+                }
             </div>
         )
     }
